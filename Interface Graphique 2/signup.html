@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="col-sm-6 col-sm-offset-3" align="center">
+        <h1><span class="fas fa-sign-in"></span>Sign Up</h1>
+        <form class="box" action="signup.html" method="post">
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" name="username" class="form-control" placeholder="Username">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" class="form-control" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <label>Confirm Password</label>
+            <input type="password" name="confirm" class="form-control" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select size="1" class="form-control" id="show" name="status" onchange="myFunction()">
+              <option value="Passager">Passager
+              <option value="Pilote">Pilote
+            </select>
+          </div>
+          <div class="form-group" id="text" style="display:none">
+            <label>Modele d'avion</label>
+            <input type="text" name="avion" class="form-control" placeholder="Avion">
+          </div>
+          <div class="form-group" id="text2" style="display:none">
+            <label>Experience</label>
+            <input type="text" name="experience" class="form-control" placeholder="Experience">
+          </div>
+          <div class="form-group" id="text3" style="display:none">
+            <label>Qualification</label>
+            <input type="text" name="qualification" class="form-control" placeholder="Qualification">
+          </div>
+          <div class="form-group" id="text4" style="display:none">
+            <label>Nombre d'heure de vols</label>
+            <input type="text" name="hvols" class="form-control" placeholder="Heure de vols">
+          </div>
+          <script>
+            function myFunction(){
+                var selectBox = document.getElementById("show");
+                var selected = selectBox.options[selectBox.selectedIndex].value;
+                var text = [];
+                text.push(document.getElementById("text"));
+                text.push(document.getElementById("text2"));
+                text.push(document.getElementById("text3"));
+                text.push(document.getElementById("text4"));
+                
+                if (selected == 'Pilote'){
+                    for(var x = 0; x < text.length; x++){
+                        text[x].style.display = "block";
+                    }
+                } else {
+                    for(var x = 0; x < text.length; x++){
+                        text[x].style.display = "none";
+                    }
+                }
+            }
+          </script>
+          <button type="submit" class="btn btn-warning btn-lg">Sign Up</button>
+        </form>
+        <hr>
+        <p>Already have an account ? <a href="login.html">Login</a>.</p>
+        <p>Or go back to the <a href="index.html">Homepage</a>.</p>
+      </div>
+    </div>
+  </body>
+</html>

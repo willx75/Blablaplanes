@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+      #mapid { height: 500px;
+      			width: 500px }
+    </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+            integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+            crossorigin=""></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  </head>
+  <body>
+    <div id="mapid"></div>
+    <script>
+      var mymap = L.map('mapid').setView([48.8534, 2.3488], 13);
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+          attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+          maxZoom: 18,
+          id: 'mapbox.streets',
+          accessToken: 'pk.eyJ1Ijoia2l6eXgiLCJhIjoiY2pzenNub2RhMHA2ZDQ0cGhpejFjMjI1aiJ9.WKv99B76fpwk-VIz9LNbIA'
+      }).addTo(mymap);
+    </script>
+    
+    
+	<div id="search">
+		<input type="text" name="addr1" value="" id="addr1" size="10" />
+		<input type="text" name="addr2" value="" id="addr2" size="10" />
+		<button type="button" onclick="addr_search();">Search</button>
+	</div>
+<script>
+function addr_search() {
+	var nom1="",nom2="";
+	var coord1=[],coord2=[];
+	var p1=false,p2=false;
+	
+	//recupere coordonnee addresse 1;
+	//je prend le 1er resultat, limit=1
+	var inp1 = document.getElementById("addr1");
+	$.getJSON('http://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + inp1.value, function(data) {
+		//var items = [];
+		
+		$.each(data, function(key, val) {
+			coord1[0]=val.lat;
+			coord1[1]=val.lon;
+			nom1=val.display_name;
+			//alert(coord1[0]+" "+coord1[1]+"\n"+nom1);
+		});
+		//traiter le resultat
+		if(nom1=="")
+			alert(inp1.value+" pas trouver");
+		else{
+			//recupere coordonnee addresse 2;
+			//je prend le 1er resultat, limit=1
+			var inp2 = document.getElementById("addr2");
+			$.getJSON('http://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + inp2.value, function(data) {
+				//var items = [];
+				$.each(data, function(key, val) {
+					coord2[0]=val.lat;
+					coord2[1]=val.lon;
+					nom2=val.display_name;
+					//alert(coord2[0]+" "+coord2[1]+"\n"+nom2);
+				});
+				//traiter le resultat
+				if(nom2=="")
+					alert(inp2.value+" pas trouver");
+				else{
+					var latlngs = [coord1,coord2];
+					var polyline = L.polyline(latlngs, {color: 'red'}).addTo(mymap);
+					var marker1 = L.marker(coord1, {draggable: true}).addTo(mymap);
+					var marker2 = L.marker(coord2, {draggable: true}).addTo(mymap);
+				  	marker1.bindPopup(nom1).openPopup();
+				  	marker2.bindPopup(nom2).openPopup();
+				}
+			});
+		}
+	});
+}
+</script>
+ 
+  </body>
+</html>
